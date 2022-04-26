@@ -1,5 +1,7 @@
 # namedidaIntegracao
 
+# Esse projeto foi criado para sincronizar e corrigir divergência de preços entre os produtos da loja magento (https://lojista.imaginariumnamedida.com.br/) e o banco de dados (LINX)
+
 # This is model project to start a new service - below steps for after clone project
 
 ### Project setup - Hades - Clone hades repository
