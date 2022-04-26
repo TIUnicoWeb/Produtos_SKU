@@ -1,0 +1,273 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+    <title>Grupo Imaginarium | Orçamento para conserto </title>
+	
+	<link rel="stylesheet" type="text/css" href="https://ms.imgnet.com.br/api.neoAssist/lib/bootstrap3/css/bootstrap.min.css" />
+	
+	<link href="https://ms.imgnet.com.br/api.neoAssist/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	
+	<link href="https://ms.imgnet.com.br/api.neoAssist/resources/css/main.css" rel="stylesheet">
+
+	<link href="https://ms.imgnet.com.br/api.neoAssist/resources/css/mainCRM.css" rel="stylesheet"> 
+	
+	<script type="text/javascript" src="https://ms.imgnet.com.br/api.neoAssist/lib/jquery.min.js"></script>
+
+	<script type="text/javascript" src="https://ms.imgnet.com.br/api.neoAssist/app/orcamento.js"></script>
+
+	<style>
+			.panel-heading {
+				margin-top : 20px;
+				background-color: #eeeeee;
+			}
+			.panel .panel-default {
+				margin-top: 10px;
+			}
+			.table {
+  				margin-top: 10px;
+			}
+			* { -webkit-print-color-adjust: exact; }
+			@media print and (color) {
+			* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+			}
+			@media print {
+			    .page-break {page-break-after: always;}
+			}
+			.report-top-bar {
+				overflow: auto;
+				margin-top: 8px;
+			}
+			
+			.report-top-bar .report-table {
+				width: 100%;
+				font-size: 11px;
+			}
+			.report-top-bar .report-date {
+				text-align: right;
+				font-size: 10px;
+				width: 100px;
+			}
+			.report-top-bar .report-title {
+				text-align: center;
+				font-size: 26px;
+				font-weight: bold;
+			}
+			.report-total-title {
+				line-height: 20px;
+				text-align: center;
+			}
+			.report-total-data {
+				text-align: center;
+			}
+			.report-total-subtitle {
+				line-height: 20px;
+				color: gray;
+				text-align: center;
+				font-size: 14px;
+			}
+			.report-panel {
+				padding: 8px 0;
+			}
+		</style>
+	
+</head>
+<body>
+	
+	<div class="container">
+		<div id="msgBox"></div>
+		
+		{{#if APROVACAO}}
+		<div class="row">
+			<div class="no-response" style="padding: 5px 0;font-size: 18px;text-align: center;margin: 20px 0;background-color: #54FF9F; color: black;">
+				<span style="background-color: #54FF9F;font-weight: bold;"> 
+					Seu orçamento foi {{APROVACAO}}, você receberá por e-mail o boleto em até 24 horas.
+				</span>
+			</div>
+		</div>
+		{{/if}}
+		{{#unless APROVACAO}}
+		<div class="row">
+			<div class="no-response" style="padding: 5px 0;font-size: 18px;text-align: center;margin: 20px 0;background-color: #54FF9F; color: black;">
+				<span style="background-color: #54FF9F;font-weight: bold;"> 
+					Olá, você deve aprovar ou reprovar este orçamento para dar sequência ao conserto do seu produto clicando nos botões abaixo:
+				</span>
+			</div>
+		</div>
+		<div class="row" style="text-align: center;">
+			<form id="formNovo">		
+				<div class="form-group">
+					<input type="hidden" value="{{Codigo}}" name="neoId">
+				</div>
+			</form>
+			<button class="btn btn-unique btn-lg aprovar" style="background-color: #2196F3; color: #FFFFFF;">Aprovar</button>
+			<button class="btn btn-unique btn-lg reprovar" style="background-color: #F44336; color: #FFFFFF;">Reprovar</button>
+		</div>
+		{{/unless}}
+		
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel-heading" style="text-align: center;">
+					Imaginarium Comércio de Presentes e Decorações S/A<br/>
+							CNPJ.: 00.399.603/0006-12
+				</div>
+				<div class="panel-heading">
+					Informações Cadastrais
+				</div>
+				<table class="table">
+					<tr>
+						<td> Código </td>
+						<td> {{PROTOCOLO}} </td>
+					</tr>
+					<tr>
+						<td> Nome do cliente  </td>
+						<td> {{Name}} </td>
+					</tr>
+					<tr>
+						<td> CPF</td>
+						<td> {{FieldU}} </td>
+					</tr>
+					<tr>
+						<td> Endereço</td>
+						<td> {{FieldB}} </td>
+					</tr>
+					<tr>
+						<td> Numero</td>
+						<td> {{FieldC}} </td>
+					</tr>
+					<tr>
+						<td> Complemento</td>
+						<td> {{FieldD}} </td>
+					</tr>
+					<tr>
+						<td> Cidade</td>
+						<td> {{FieldF}} </td>
+					</tr>
+					<tr>
+						<td> UF</td>
+						<td> {{FieldG}} </td>
+					</tr>
+					<tr>
+						<td> CEP</td>
+						<td> {{FieldH}} </td>
+					</tr>
+					
+					<tr>
+						<td> Laudo Técnico</td>
+						<td> {{LAUDO_TECNICO}} </td>
+					</tr>
+
+					
+				</table>
+
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel-heading">
+					Informações da Ordem de Serviço
+				</div>
+				<table class="table">
+					{{#each produtos}}
+
+					<tr style="background-color: #CCCCCC;">
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td> Quantidade</td>
+						<td> {{cliQuantidade}} </td>
+					</tr>
+					<tr>
+						<td> Descrição</td>
+						<td> {{cliProduto}} </td>
+					</tr>
+
+
+					{{/each}}
+					
+					
+				</table>
+			</div>
+		</div>
+		{{!-- <div class="row">
+			<div class="col-md-12">
+				<div class="panel-heading" style="text-align: center;">
+					Transporte
+				</div>
+				<table class="table">
+					<tr>
+						<th>Código</th>
+						<th>Descrição</th>
+						<th>QTD</th>
+						<th>Valor UNT</th>
+						<th>Valor Total</th>
+					</tr>
+					{{{TRANSPORTE}}}
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel-heading" style="text-align: center;">
+					Serviços
+				</div>
+				<table class="table">
+					<tr>
+						<th>Código</th>
+						<th>Descrição</th>
+						<th>QTD</th>
+						<th>Valor UNT</th>
+						<th>Valor Total</th>
+					</tr>
+					{{{SERVICOS}}}
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel-heading" style="text-align: center;">
+					Peças Utilizadas
+				</div>
+				<table class="table">
+					<tr>
+						<th>Código</th>
+						<th>Descrição</th>
+						<th>QTD</th>
+						<th>Valor UNT</th>
+						<th>Valor Total</th>
+					</tr>
+					{{{PECAS}}}
+				</table>
+			</div> --}}
+		{{!-- </div> --}}
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table" style="background-color: #CCCCCC;">
+					<tr>
+						<td style="width: 15%;" colspan="3"><b>Total do Conserto (Mão de obra + peças utilizadas)</b></td>
+						<td style="width: 15%;"></td>
+						<td style="width: 15%;"><b> {{{TOTAL}}}</b></td>
+					</tr>
+					<tr>
+						<td>Com o frete incluso</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>	
+	<script type="text/javascript" src="https://ms.imgnet.com.br/api.neoAssist/lib/bootstrap3/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		localStorage.setItem('protocolo', {{PROTOCOLO}});
+		console.log('@@@@@@@@@@@@@@')
+		console.log(localStorage.getItem('protocolo'))
+	</script>
+</body>
+</html>

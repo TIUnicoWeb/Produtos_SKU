@@ -1,0 +1,8 @@
+{
+  "serviceName": "namedidaIntegracao",
+  "address": "img-srv-052",
+  "configServiceHost": "img-srv-007",
+  "configServicePort": "7800",
+  "apiPort": 9462,
+  "--inspect=0.0.0.0": "9462"
+}

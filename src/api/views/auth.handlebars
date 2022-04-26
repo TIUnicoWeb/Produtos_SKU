@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Autenticação - Uni.co</title>
+
+    {{!-- Firebase Auth --}}
+    <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js"></script>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <style>
+        
+        html {
+            height: 100%;
+            font-family: 'Barlow', sans-serif;
+        }
+
+        body {
+            height: 100%;
+            font-family: 'Barlow', sans-serif;
+            display: flex;
+            justify-content: center;
+            overflow-x: none;
+            background-color: #FAFBFD;
+        }
+
+        .logo {
+            flex: 1;
+            background-image: url("https://portal.grupounico.com/bg-login.png");
+            background-position: right;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .login-container {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+           
+        }
+
+        .centered {
+            width: 50%;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-bottom: 18px;
+            
+            border-radius: 4px;
+            
+        }
+
+        .center .img {
+            padding-bottom: 1em;
+            width: 100%;
+        }
+
+        .title {
+            font-weight: 700;
+            font-size: 27px;
+            color: #465B80;
+            padding: 27px 0px;
+        }
+
+        .description {
+            text-align: justify;
+            font-size: 14px;
+            color: #465B80;
+            padding: 9px 0px;
+           
+        }
+
+        .button-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-top: 27px; 
+        }
+
+        .button-circled {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            border-radius: 18px;
+            justify-content: center;
+            height: 36px;
+            border: 1px solid #0072CE;
+            background: #FAFBFD;
+            color: #0072CE;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 3px 27px;
+        }
+
+        .button-text {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            background: transparent;
+            color: #0072CE;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 3px 0px;
+            border: 0px;
+        }
+
+        .back-button {
+            color: #465B80 !important;
+            margin-bottom: 9px;
+        }
+        .button-circled:hover {
+            background: #0072CE;
+            color: #FAFBFD;
+        }
+
+        button:focus {
+            background: #FAFBFD;
+            color: #0072CE;
+        }
+
+        .input-top {
+            color: #465B80;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        #externo-btn {
+           width: 100%;
+        }
+
+        #externo-btn span {
+            padding: 9px 0px 3px 0px;
+        }
+
+        .input-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .input {
+            border: 1px solid #E0E3E7 !important;
+            background: #EEEFF0 !important;
+            border-radius: 4px !important;
+            color: #465B80 !important;
+            padding-left: 18px !important;
+            width: 95% !important;
+            flex: 1 !important;
+        }
+
+        @media (max-width: 800px) {
+            .center {
+                width: 90%;
+            }
+        }
+        
+        @media (max-width: 800px) {
+            .logo {
+                display: none;
+            }
+
+            
+        }
+
+        @media (max-width: 1200px) {
+            .login-container {
+                flex: 2;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .center {
+                height: 100%;
+            }
+
+            .title {
+                padding: 9px 0px;
+            }
+        }
+
+
+    </style>
+    
+</head>
+<body>
+
+    <div class="logo"></div>
+    <div class="login-container">
+        <div class="centered">
+
+            <div><img class="img" style="width: 100%" src="https://portal.grupounico.com/assinatura-unico.png" alt="logo"></div>
+            <span class="title">Autenticação Uni.co</span>
+            {{!-- tela de selecao do tipo do login --}}
+            <div id="tipo-login">
+                <span class="description" id="google-text">Primeiro, selecione o seu tipo de autenticação:</span>
+                <div class="button-box">
+                    <button class="button-circled" style="width: 250px" type="submit" name="action" onclick="openCollabLogin()">Colaborador</button>
+                    <button class="button-circled" style="width: 250px; margin-top: 9px;" type="submit" name="action" onclick="openExternalLogin()">Externo</button>
+                </div>
+            </div>
+
+            {{!-- tela de login de colaborador --}}
+            <div id="collab-login">
+                <button class="button-text back-button" type="submit" name="action" onclick="closeCollabLogin()"><i class="material-icons">arrow_back</i></button>
+                <span class="description" id="google-text">Para prosseguir, entre com sua conta corporativa do Google (Domínios imaginarium.com.br, casamind.com.br ou grupounico.com):</span>
+                <div class="button-box">
+                    <button class="button-circled" onclick="loginGoogle()" id="google-btn">
+                        <img width="30" style="padding-right: 9px" src="https://portal.grupounico.com/google.png" alt="google">
+                        <span>Login de Colaboradores</span>
+                    </button>
+                </div>
+            </div>
+
+            {{!-- tela de login externo --}}
+            <div id="external-login">
+                <button class="button-text back-button" type="submit" name="action" onclick="closeExternalLogin()"><i class="material-icons">arrow_back</i></button>
+                <span class="description" id="externo-text">Para prosseguir, entre com o email cadastrado junto ao seu consultor:</span>
+                <div id="externo-btn">
+                    <div class="input-box">
+                        <span class="input-top left">Email</span>
+                        <input class="input" type="text" id="login" placeholder="Email" autocomplete="off">
+                        <span class="input-top left">Senha</span>
+                        <input class="input" type="password" id="password" placeholder="Senha" autocomplete="off">
+                    </div>
+                    <div class="button-box">
+                        <button class="button-circled" style="width: 200px" type="submit" name="action" onclick="loginPassword()">Entrar</button>
+                        <button class="button-text" type="submit" name="action" onclick="openForgotPassword()">Esqueci minha senha</button>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- esqueci minha senha --}}
+            <div id="forgot-password">
+                <button class="button-text back-button" type="submit" name="action" onclick="closeForgotPassword()"><i class="material-icons">arrow_back</i></button>
+                <span class="description" id="google-text">Digite seu e-mail cadastrado para recuperação de sua senha:</span>
+                <input class="input" type="text" id="forgot-pass-email" placeholder="Email" autocomplete="off">
+                <div class="button-box">
+                    <button class="button-circled" style="width: 200px" type="submit" name="action" onclick="resetPassword()">Recuperar</button>
+                </div>
+            </div>
+
+            {{!-- loading --}}
+            <div id="loading">
+                <img src="https://portal.grupounico.com/loading.gif" alt="loading">
+            </div>
+        </div>
+            
+    </div>
+
+
+</body>
+
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAtqHDtz-YK60NcKmSzCsO4RKEzSt4ax7s",
+        authDomain: "auth-unico.firebaseapp.com",
+        databaseURL: "https://auth-unico.firebaseio.com",
+        projectId: "auth-unico",
+        storageBucket: "auth-unico.appspot.com",
+        messagingSenderId: "518555719062"
+    };
+
+    //document.querySelector('#google-text').style.display = 'none'
+    //document.querySelector('#google-btn').style.display = 'none'
+    //document.querySelector('#externo-text').style.display = 'none'
+    //document.querySelector('#externo-btn').style.display = 'none'
+    document.querySelector('#tipo-login').style.display = 'none'
+    document.querySelector('#collab-login').style.display = 'none'
+    document.querySelector('#external-login').style.display = 'none'
+    document.querySelector('#forgot-password').style.display = 'none'
+    document.querySelector('#loading').style.display = 'block'
+    
+
+    firebase.initializeApp(config);
+    var provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
+    provider.addScope('https://www.googleapis.com/auth/userinfo.email');
+    provider.addScope('https://www.googleapis.com/auth/plus.me');
+    firebase.auth().languageCode = 'pt';
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            firebase.auth().currentUser.getIdToken(true)
+                .then(idToken => {
+                    console.log(idToken)
+                    document.cookie = "firebasetoken=" + idToken + ";path=/"
+                    console.log('---- logado')
+                    setTimeout(function(){
+                        location.reload()
+                    }, 1000)
+                })
+                .catch(console.error)
+        } else {
+            console.log('--- nao logado')
+            document.querySelector('#tipo-login').style.display = 'block'
+            document.querySelector('#loading').style.display = 'none'
+
+            //document.querySelector('#google-text').style.display = 'block'
+            //document.querySelector('#google-btn').style.display = 'block'
+            //document.querySelector('#externo-text').style.display = 'block'
+            //document.querySelector('#externo-btn').style.display = 'block'
+        }
+    });
+
+    function openCollabLogin() {
+        document.querySelector('#tipo-login').style.display = 'none'
+        document.querySelector('#collab-login').style.display = 'block'
+    };
+    function closeCollabLogin() {
+        document.querySelector('#tipo-login').style.display = 'block'
+        document.querySelector('#collab-login').style.display = 'none'
+    };
+    function openExternalLogin() {
+        document.querySelector('#tipo-login').style.display = 'none'
+        document.querySelector('#external-login').style.display = 'block'
+    };
+    function closeExternalLogin() {
+        document.querySelector('#tipo-login').style.display = 'block'
+        document.querySelector('#external-login').style.display = 'none'
+    };
+    function openForgotPassword() {
+        document.querySelector('#forgot-password').style.display = 'block'
+        document.querySelector('#external-login').style.display = 'none'
+    };
+    function closeForgotPassword() {
+        document.querySelector('#forgot-password').style.display = 'none'
+        document.querySelector('#external-login').style.display = 'block'
+    };
+
+    function loginPassword(){
+        var login = document.querySelector('#login').value
+        var password = document.querySelector('#password').value
+
+        firebase.auth()
+            .signInWithEmailAndPassword(login, password)
+            .catch(function(error) {
+                console.log(error)
+                alert('Login ou senha incorretos')
+
+            });
+    };
+
+    function loginGoogle(){
+        firebase.auth().signInWithPopup(provider)
+            .then(function(result) {
+                console.log(result)
+            }).catch(function(error) {
+                console.log(error)
+            });
+    };
+
+    function resetPassword(){
+        var email = document.querySelector('#login').value;
+
+        if(!email) {
+            return alert('Digite seu e-mail!')
+        }
+
+        console.log(email)
+
+        firebase.auth()
+            .sendPasswordResetEmail(email)
+            .then(() => {
+                alert('Solicitação enviada. Verifique seu e-mail para prosseguir na redefinição da sua senha.')
+            })
+            .catch(() => alert('Erro ao redefinir sua senha. Verifique seu email ou tente novamente mais tarde.'))
+
+        closeForgotPassword();
+
+    };
+</script>
+</html>
